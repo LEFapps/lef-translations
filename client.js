@@ -26,13 +26,8 @@ import faAlignLeft from "@fortawesome/fontawesome-free-solid/faAlignLeft";
 import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
 import { Meteor } from "meteor/meteor";
 import { withTracker } from "meteor/react-meteor-data";
-import { contains, extend } from "underscore";
 import Translator from "./lib";
 import { Session } from "meteor/session";
-import { Roles } from "meteor/alanning:roles";
-import Upload from "meteor/lef:upload";
-
-const _ = { contains, extend };
 
 const markdown = require("markdown-it")({
   html: true,
@@ -47,7 +42,7 @@ Tracker.autorun(() => {
     const navLang = (navigator.language || navigator.userLanguage).split(
       "-"
     )[0];
-    if (_.contains(Translator.languages, navLang)) {
+    if (Translator.languages.includes(navLang)) {
       language = navLang;
     } else {
       language = Translator.default;

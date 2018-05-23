@@ -11,10 +11,9 @@ Package.onUse(api => {
     "mongo",
     "check",
     "tracker",
-    "alanning:roles",
-    "lef:upload"
+    "session"
   ]);
-  api.addFiles("server.coffee", "server");
+  api.addFiles("server.js", "server");
   api.mainModule("client.js", "client");
 });
 
