@@ -27,3 +27,9 @@ import { PickLanguage } from "meteor/lef:translations";
 
 <PickLanguage />
 ```
+
+## Installation
+
+Create a symbolic link to this package in your meteor's package folder:
+
+`ln -s ../../packages/lef-translations/ lef-translations`
