@@ -1,17 +1,17 @@
 Package.describe({
   summary: "Add translation",
-  version: "2.0.1",
+  version: "2.0.2",
   name: "lef:translations"
 });
 
 Package.onUse(api => {
   api.use([
-    "coffeescript",
     "ecmascript",
     "mongo",
     "check",
     "tracker",
-    "session"
+    "session",
+    "alanning:roles"
   ]);
   api.addFiles("server.js", "server");
   api.mainModule("client.js", "client");

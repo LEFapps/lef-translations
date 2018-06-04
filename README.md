@@ -28,6 +28,15 @@ import { PickLanguage } from "meteor/lef:translations";
 <PickLanguage />
 ```
 
+## Configuration
+
+```JSX
+import { Translator } from "meteor/lef:translations";
+
+Translator.languages = ["nl", "fr];
+Translator.default = "nl"
+```
+
 ## Installation
 
 Create a symbolic link to this package in your meteor's package folder:

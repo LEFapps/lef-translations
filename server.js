@@ -12,15 +12,15 @@ Meteor.publish("translation", (options, language) => {
 
 Meteor.publish("translations", id => {
   if (id) {
-    Translator.translations.find({ _id: id });
+    return Translator.translations.find({ _id: id });
   } else {
-    Translator.translations.find({}, { sort: { _id: 1 } });
+    return Translator.translations.find({}, { sort: { _id: 1 } });
   }
 });
 
 Meteor.methods({
   updateTranslation: update => {
-    Translator.translations.update(update._id, { $set: update });
+    return Translator.translations.update(update._id, { $set: update });
   },
   removeTranslation: id => {
     // Guard 'admin', -> Translator.translations.remove _id:id
