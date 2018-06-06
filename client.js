@@ -158,7 +158,8 @@ class TranslationModal extends Component {
     this.toggleUpload = this.toggleUpload.bind(this);
   }
   static getDerivedStateFromProps({ translation }, prevState) {
-    return translation || null;
+    if (!prevState) return translation;
+    else return null;
   }
   handleChange(e, language) {
     this.setState({ [language]: e.target.value });
@@ -179,11 +180,13 @@ class TranslationModal extends Component {
     });
   }
   render() {
-    if (this.props.loading) return null;
+    const { loading, open, toggle } = this.props;
+    const translation = this.state;
+    if (loading) return null;
     return (
-      <Modal isOpen={this.props.open} toggle={this.props.toggle} size="lg">
-        <ModalHeader toggle={this.props.toggle}>
-          <FontAwesomeIcon icon={faEdit} /> {this.props.translation._id}
+      <Modal isOpen={open} toggle={toggle} size="lg">
+        <ModalHeader toggle={toggle}>
+          <FontAwesomeIcon icon={faEdit} /> {translation._id}
         </ModalHeader>
         <ModalBody>
           {/* <div className="row">
@@ -210,25 +213,25 @@ class TranslationModal extends Component {
               return (
                 <div className="col" key={language}>
                   <h6>{language}</h6>
-                  {this.props.translation.md ? (
+                  {translation.md ? (
                     <div>
                       <Input
                         type="textarea"
-                        value={this.state[language]}
+                        value={translation[language]}
                         onChange={e => this.handleChange(e, language)}
                         rows="10"
                       />
                       <hr />
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: markdown.render(this.state[language] || "")
+                          __html: markdown.render(translation[language] || "")
                         }}
                       />
                     </div>
                   ) : (
                     <Input
                       type="text"
-                      value={this.state[language]}
+                      value={translation[language]}
                       onChange={e => this.handleChange(e, language)}
                     />
                   )}
@@ -242,7 +245,7 @@ class TranslationModal extends Component {
           <Button onClick={this.save} color="success">
             <FontAwesomeIcon icon={faCheck} />
           </Button>
-          <Button onClick={this.props.toggle} color="danger">
+          <Button onClick={toggle} color="danger">
             <FontAwesomeIcon icon={faTimes} />
           </Button>
         </ModalFooter>
