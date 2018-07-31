@@ -18,8 +18,9 @@ import {
   Card,
   Popover,
   PopoverHeader,
-  PopoverBody
+  PopoverBody,
 } from "reactstrap";
+import { keys } from "lodash";
 import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faFlag from "@fortawesome/fontawesome-free-solid/faFlag";
 import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
@@ -37,7 +38,7 @@ import { Roles } from "meteor/alanning:roles";
 const markdown = require("markdown-it")({
   html: true,
   linkify: true,
-  typography: true
+  typography: true,
 }).use(require("markdown-it-video"));
 
 Tracker.autorun(() => {
@@ -45,7 +46,7 @@ Tracker.autorun(() => {
   language = (ref = Meteor.user()) != null ? ref.profile.language : void 0;
   if (!language) {
     const navLang = (navigator.language || navigator.userLanguage).split(
-      "-"
+      "-",
     )[0];
     if (Translator.languages.includes(navLang)) {
       language = navLang;
@@ -60,8 +61,8 @@ Translator.setLanguage = language => {
   if (Meteor.user()) {
     return Meteor.users.update(Meteor.user()._id, {
       $set: {
-        "profile.language": language
-      }
+        "profile.language": language,
+      },
     });
   } else {
     return Session.set("language", language);
@@ -95,12 +96,12 @@ class MarkdownHelp extends Component {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state = {
-      popoverOpen: false
+      popoverOpen: false,
     };
   }
   toggle() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen
+      popoverOpen: !this.state.popoverOpen,
     });
   }
   render() {
@@ -147,19 +148,24 @@ class MarkdownHelp extends Component {
   }
 }
 
+const TranslationModalContainer = props => {
+  const { translation } = props;
+  if (!translation) return null;
+  return (
+    <TranslationModal
+      {...props}
+      key={`${translation._id}-${keys(translation).join("-")}`}
+    />
+  );
+};
+
 class TranslationModal extends Component {
   constructor(props) {
     super(props);
-    const state = props.translation || {};
-    state.upload = false;
+    const state = props.translation || false;
     this.state = state;
-    this.handleChange = this.handleChange.bind(this);
     this.save = this.save.bind(this);
     this.toggleUpload = this.toggleUpload.bind(this);
-  }
-  static getDerivedStateFromProps({ translation }, prevState) {
-    if (!prevState) return translation;
-    else return null;
   }
   handleChange(e, language) {
     this.setState({ [language]: e.target.value });
@@ -182,7 +188,7 @@ class TranslationModal extends Component {
   render() {
     const { loading, open, toggle } = this.props;
     const translation = this.state;
-    if (loading) return null;
+    if (loading || !translation) return null;
     return (
       <Modal isOpen={open} toggle={toggle} size="lg">
         <ModalHeader toggle={toggle}>
@@ -224,7 +230,7 @@ class TranslationModal extends Component {
                       <hr />
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: markdown.render(translation[language] || "")
+                          __html: markdown.render(translation[language] || ""),
                         }}
                       />
                     </div>
@@ -258,13 +264,13 @@ const ModalContainer = withTracker(props => {
   const handle = Meteor.subscribe("translations", props.translation._id);
   const translation = Translator.translations.findOne(props.translation._id);
   return { translation, loading: !handle.ready() };
-})(TranslationModal);
+})(TranslationModalContainer);
 
 class Translate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
     };
     this.toggleEditing = this.toggleEditing.bind(this);
   }
@@ -310,7 +316,7 @@ const TranslateContainer = withTracker(function(options) {
         : void 0
       : void 0;
   return {
-    translation: translation
+    translation: translation,
   };
 })(Translate);
 
@@ -318,7 +324,7 @@ class TranslationEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editing: false
+      editing: false,
     };
     this.toggleEditing = this.toggleEditing.bind(this);
   }
@@ -345,7 +351,7 @@ class Translations extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: {}
+      query: {},
     };
   }
   search(e, key) {
@@ -353,7 +359,7 @@ class Translations extends Component {
     if (e.target.value) {
       query[key] = {
         $regex: e.target.value,
-        $options: "i"
+        $options: "i",
       };
     } else {
       delete query[key];
@@ -421,10 +427,10 @@ class Translations extends Component {
 }
 
 const TranslationsContainer = withTracker(props => {
-  handle = Meteor.subscribe("translations");
+  const handle = Meteor.subscribe("translations");
   return {
     translations: Translator.translations,
-    loading: !handle.ready()
+    loading: !handle.ready(),
   };
 })(Translations);
 
@@ -432,5 +438,5 @@ export {
   TranslateContainer as Translate,
   PickLanguage,
   TranslationsContainer as Translations,
-  Translator
+  Translator,
 };
