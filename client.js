@@ -20,14 +20,16 @@ import {
   PopoverHeader,
   PopoverBody
 } from "reactstrap";
-import FontAwesomeIcon from "@fortawesome/react-fontawesome";
-import faFlag from "@fortawesome/fontawesome-free-solid/faFlag";
-import faEdit from "@fortawesome/fontawesome-free-solid/faEdit";
-import faCheck from "@fortawesome/fontawesome-free-solid/faCheck";
-import faTimes from "@fortawesome/fontawesome-free-solid/faTimes";
-import faAlignLeft from "@fortawesome/fontawesome-free-solid/faAlignLeft";
-import faSearch from "@fortawesome/fontawesome-free-solid/faSearch";
-import faQuestion from "@fortawesome/fontawesome-free-solid/faQuestion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+   faFlag,
+   faEdit,
+   faCheck,
+   faTimes,
+   faAlignLeft,
+   faSearch,
+   faQuestion
+} from "@fortawesome/free-solid-svg-icons";
 import { Meteor } from "meteor/meteor";
 import { withTracker } from "meteor/react-meteor-data";
 import Translator from "./lib";
