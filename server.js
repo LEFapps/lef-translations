@@ -24,5 +24,5 @@ Meteor.methods({
   },
   removeTranslation: id => {
     // Guard 'admin', -> Translator.translations.remove _id:id
-  }
+  },
 });
