@@ -22,13 +22,13 @@ import {
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-   faFlag,
-   faEdit,
-   faCheck,
-   faTimes,
-   faAlignLeft,
-   faSearch,
-   faQuestion
+  faFlag,
+  faEdit,
+  faCheck,
+  faTimes,
+  faAlignLeft,
+  faSearch,
+  faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 import { Meteor } from "meteor/meteor";
 import { withTracker } from "meteor/react-meteor-data";
@@ -289,7 +289,7 @@ class Translate extends Component {
     const text =
       this.props.md && tr ? markdown.render(tr) : tr || this.props._id;
     return (
-      <div>
+      <>
         <ModalContainer
           translation={this.props}
           toggle={this.toggleEditing}
@@ -300,7 +300,7 @@ class Translate extends Component {
           dangerouslySetInnerHTML={{ __html: text }}
           onDoubleClick={this.toggleEditing}
         />
-      </div>
+      </>
     );
   }
 }
