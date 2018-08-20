@@ -26,7 +26,7 @@ export default (PickLanguage = () => {
           return (
             <DropdownItem
               key={language}
-              onClick={() => translator.setLanguage(language)}
+              onClick={() => translator.setCurrentLanguage(language)}
             >
               {language}
             </DropdownItem>
