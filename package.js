@@ -1,19 +1,12 @@
 Package.describe({
-  summary: "Add translation",
-  version: "2.0.4",
-  name: "lef:translations",
+  summary: "Translations/CMS for Meteor/React",
+  version: "2.1.0",
+  name: "lef:translations"
 });
 
 Package.onUse(api => {
-  api.use([
-    "ecmascript",
-    "mongo",
-    "check",
-    "tracker",
-    "session",
-    "alanning:roles",
-  ]);
-  api.addFiles("server.js", "server");
+  api.use(["ecmascript", "mongo", "alanning:roles", "lef:adminlist"]);
+  api.mainModule("server.js", "server");
   api.mainModule("client.js", "client");
 });
 
@@ -25,5 +18,6 @@ Npm.depends({
   "@fortawesome/fontawesome": "1.1.8",
   "@fortawesome/fontawesome-svg-core": "1.2.0",
   "@fortawesome/free-solid-svg-icons": "5.2.0",
-  "@fortawesome/react-fontawesome": "0.1.0"
+  "@fortawesome/react-fontawesome": "0.1.0",
+  "markdown-it": "8.4.2"
 });

@@ -1,6 +1,6 @@
-# Translations
+# Translations/CMS
 
-Meteor package for translations
+Meteor React package for translations and CMS.
 
 ## Installation
 
@@ -28,17 +28,20 @@ import { PickLanguage } from "meteor/lef:translations";
 <PickLanguage />
 ```
 
-## Configuration
+## API
 
 ```JSX
 import { Translator } from "meteor/lef:translations";
 
-Translator.languages = ["nl", "fr];
-Translator.default = "nl"
+const translator = new Translator()
+
+// SET
+translator.setLanuages(["nl", "fr", "en"])
+translator.setDefault("nl")
+translator.setCurrentLanguage("fr")
+
+// GET
+translator.getLanguages()
+translator.getCurrentLanguage()
+translator.getDefault()
 ```
-
-## Installation
-
-Create a symbolic link to this package in your meteor's package folder:
-
-`ln -s ../../packages/lef-translations/ lef-translations`
