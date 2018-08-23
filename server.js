@@ -2,17 +2,21 @@ import Translator from "./Translator";
 
 const collection = new Translator().translations;
 
-Meteor.publish("translation", (options, language) => {
-  // options expect _id, md, preventInPageEdit
-  if (!collection.findOne(options._id)) {
-    collection.insert(options);
+Meteor.publish("translation", ({ _id, md }, language) => {
+  // options expect _id, md
+  if (!collection.findOne(_id)) {
+    collection.insert({ _id, md });
   }
   const fields = {};
   fields[language] = 1;
-  return collection.find({ _id: options._id }, { fields: fields });
+  return collection.find({ _id }, { fields });
 });
 
-Meteor.publish("translations", (query, params = {}) => {
+Meteor.publish("translationEdit", query => {
+  return collection.find(query);
+});
+
+Meteor.publish("translationsList", (query, params) => {
   return collection.find(query, params);
 });
 

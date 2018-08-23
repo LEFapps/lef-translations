@@ -13,8 +13,10 @@ import { Meteor } from "meteor/meteor";
 import { withTracker } from "meteor/react-meteor-data";
 import { Roles } from "meteor/alanning:roles";
 import { keys, concat } from "lodash";
-import MarkdownHelp from "./MarkdownHelp";
+import PropTypes from "prop-types";
 import MarkdownIt from "markdown-it";
+
+import MarkdownHelp from "./MarkdownHelp";
 import AdminList from "meteor/lef:adminlist";
 
 import Translator from "./Translator";
@@ -119,7 +121,7 @@ class TranslationModal extends Component {
 }
 
 const ModalContainer = withTracker(props => {
-  const handle = Meteor.subscribe("translations", props.translation._id);
+  const handle = Meteor.subscribe("translationEdit", props.translation._id);
   const translation = new Translator().translations.findOne(
     props.translation._id
   );
@@ -143,12 +145,16 @@ class Translate extends Component {
     }
   }
   render() {
-    const { loading, translation } = this.props;
+    const { loading, translation, getString } = this.props;
     if (loading) return null;
     const text =
       this.props.md && translation
         ? markdown.render(translation)
         : translation || this.props._id;
+    if (getString) {
+      console.log(text || _id);
+      return text || _id;
+    }
     return (
       <>
         <ModalContainer
@@ -179,6 +185,13 @@ const TranslateContainer = withTracker(options => {
     translation
   };
 })(Translate);
+
+TranslateContainer.propTypes = {
+  _id: PropTypes.string.isRequired,
+  md: PropTypes.bool,
+  getString: PropTypes.bool,
+  preventInPageEdit: PropTypes.bool
+};
 
 class TranslationEdit extends Component {
   constructor(props) {
@@ -231,7 +244,7 @@ class Translations extends Component {
     return (
       <AdminList
         collection={new Translator().translations}
-        subscription="translations"
+        subscription="translationsList"
         fields={concat("_id", new Translator().languages)}
         getTotalCall="totalTranslations"
         extraColumns={[doc => <TranslationEdit translation={doc} />]}

@@ -8,7 +8,7 @@ Git clone this repository into your projects `packages` folder and `meteor add l
 
 ## Text component
 
-Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support).
+Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support). Set `getString` to only get the translation string returned. Default a `<span>` will be returned.
 
 ```JSX
 import { Translate } from "meteor/lef:translations";
