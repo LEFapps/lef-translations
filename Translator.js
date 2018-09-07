@@ -1,54 +1,70 @@
-import { Mongo } from "meteor/mongo";
-import { Meteor } from "meteor/meteor";
+import React, { Component } from 'react'
+import { Meteor } from 'meteor/meteor'
+import { withTracker } from 'meteor/react-meteor-data'
 
-const collection = new Mongo.Collection("translations");
+const TranslatorContext = React.createContext()
 
-export default class Translator {
-  constructor() {
-    this.languages = ["nl", "fr", "en"];
-    this.default = "nl";
-    this.translations = collection;
-    if (Meteor.isClient) this.initLanguage();
+class Translator extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {}
   }
-  initLanguage() {
-    let language;
-    const user = Meteor.user();
-    language = user ? user.profile.language : undefined;
+  static getDerivedStateFromProps ({ settings, user }) {
+    let language
+    language = user ? user.profile.language : undefined
     if (!language) {
-      const navLang = (navigator.language || navigator.userLanguage).split(
-        "-"
-      )[0];
-      if (this.languages.includes(navLang)) {
-        language = navLang;
+      const navLang = (navigator.language || navigator.userLanguage).split('-')[
+        0
+      ]
+      if (settings.languages.includes(navLang)) {
+        language = navLang
       } else {
-        language = this.default;
+        language = settings.default
       }
     }
-    this.currentLanguage = language;
+    settings.currentLanguage = language
+    return settings
   }
-  setLanguages(languages) {
-    this.languages = languages;
-  }
-  setDefault(language) {
-    this.default = language;
-  }
-  setCurrentLanguage(language) {
-    if (Meteor.user()) {
+  setCurrentLanguage (language) {
+    if (this.user) {
       return Meteor.users.update(Meteor.user()._id, {
         $set: {
-          "profile.language": language
+          'profile.language': language
         }
-      });
+      })
     }
-    this.currentLanguage = language;
+    this.setState({ currentLanguage: language })
   }
-  getLanguages() {
-    return this.languages;
-  }
-  getDefault() {
-    return this.default;
-  }
-  getCurrentLanguage() {
-    return this.currentLanguage;
+  render () {
+    return (
+      <TranslatorContext.Provider
+        value={{
+          translator: {
+            ...this.state,
+            setCurrentLanguage: this.setCurrentLanguage,
+            user: this.props.user
+          }
+        }}
+      >
+        {this.props.children}
+      </TranslatorContext.Provider>
+    )
   }
 }
+
+const TranslatorContainer = withTracker(() => {
+  return { user: Meteor.user() }
+})(Translator)
+
+const withTranslator = Component => {
+  return function TranslatorComponent (props) {
+    return (
+      <TranslatorContext.Consumer>
+        {translator => <Component {...props} {...translator} />}
+      </TranslatorContext.Consumer>
+    )
+  }
+}
+
+export { TranslatorContainer as Translator, withTranslator }

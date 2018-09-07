@@ -1,32 +1,30 @@
-import Translator from "./Translator";
+import { Meteor } from 'meteor/meteor'
 
-const collection = new Translator().translations;
+import Collection from './Collection'
 
-Meteor.publish("translation", ({ _id, md }, language) => {
+Meteor.publish('translation', ({ _id, md }, language) => {
   // options expect _id, md
-  if (!collection.findOne(_id)) {
-    collection.insert({ _id, md });
+  if (!Collection.findOne(_id)) {
+    Collection.insert({ _id, md })
   }
-  const fields = {};
-  fields[language] = 1;
-  return collection.find({ _id }, { fields });
-});
+  const fields = {}
+  fields[language] = 1
+  return Collection.find({ _id }, { fields })
+})
 
-Meteor.publish("translationEdit", query => {
-  return collection.find(query);
-});
+Meteor.publish('translationEdit', query => {
+  return Collection.find(query)
+})
 
-Meteor.publish("translationsList", (query, params) => {
-  return collection.find(query, params);
-});
+Meteor.publish('translationsList', (query, params) => {
+  return Collection.find(query, params)
+})
 
 Meteor.methods({
   updateTranslation: update => {
-    return collection.update(update._id, { $set: update });
+    return Collection.update(update._id, { $set: update })
   },
   totalTranslations: query => {
-    return collection.find(query).count();
+    return Collection.find(query).count()
   }
-});
-
-export { Translator };
+})
