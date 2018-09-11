@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { Button, Popover, PopoverHeader, PopoverBody } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestion } from "@fortawesome/free-solid-svg-icons";
+import React, { Component } from 'react'
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
-export default class MarkdownHelp extends Component {
-  constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
+class MarkdownHelp extends Component {
+  constructor (props) {
+    super(props)
+    this.toggle = this.toggle.bind(this)
     this.state = {
       popoverOpen: false
-    };
+    }
   }
-  toggle() {
+  toggle () {
     this.setState({
       popoverOpen: !this.state.popoverOpen
-    });
+    })
   }
-  render() {
+  render () {
     return (
       <span>
-        <Button id="markdownhelp" outline color="warning" onClick={this.toggle}>
+        <Button id='markdownhelp' outline color='warning' onClick={this.toggle}>
           <FontAwesomeIcon icon={faQuestion} />
         </Button>
         <Popover
-          placement="auto"
+          placement='auto'
           isOpen={this.state.popoverOpen}
-          target="markdownhelp"
+          target='markdownhelp'
           toggle={this.toggle}
         >
           <PopoverHeader>Markdown Help</PopoverHeader>
@@ -52,7 +52,7 @@ export default class MarkdownHelp extends Component {
             <h5>Links</h5>
             <p>[leesbare tekst](https://www.voorbeeld.com)</p>
             <h5>Quote</h5>
-            <p>> Quote</p>
+            <p>&gt; Quote</p>
             <h5>Video embed</h5>
             <p>
               @[youtube](https://www.youtube.com/watch?v=_gMq3hRLDD0)
@@ -62,6 +62,8 @@ export default class MarkdownHelp extends Component {
           </PopoverBody>
         </Popover>
       </span>
-    );
+    )
   }
 }
+
+export default MarkdownHelp
