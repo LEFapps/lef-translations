@@ -25,12 +25,12 @@ const languageSettings = {
 
 ## Text component
 
-Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support). Set `getString` to only get the translation string returned. Default a `<span>` will be returned.
+Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support). Set `getString` to only get the translation string returned. Default a `<span>` will be returned. Optionally use the `category` prop to classify translations and make the admin overview clearer.
 
 ```JSX
 import { Translate } from 'meteor/lef:translations'
 
-<Translate _id='welcome_message' md />
+<Translate _id='welcome_message' md category='home' />
 ```
 
 ## Admin component
