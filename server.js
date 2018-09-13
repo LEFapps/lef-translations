@@ -2,10 +2,9 @@ import { Meteor } from 'meteor/meteor'
 
 import Collection from './Collection'
 
-Meteor.publish('translation', ({ _id, md }, language) => {
-  // options expect _id, md
+Meteor.publish('translation', ({ _id, md, category }, language) => {
   if (!Collection.findOne(_id)) {
-    Collection.insert({ _id, md })
+    Collection.insert({ _id, md, category })
   }
   const fields = {}
   fields[language] = 1

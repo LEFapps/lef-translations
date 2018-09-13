@@ -18,8 +18,8 @@ class MarkdownHelp extends Component {
   }
   render () {
     return (
-      <span>
-        <Button id='markdownhelp' outline color='warning' onClick={this.toggle}>
+      <span id='markdownhelp'>
+        <Button outline color='warning' onClick={this.toggle}>
           <FontAwesomeIcon icon={faQuestion} />
         </Button>
         <Popover
@@ -27,6 +27,7 @@ class MarkdownHelp extends Component {
           isOpen={this.state.popoverOpen}
           target='markdownhelp'
           toggle={this.toggle}
+          container='markdownhelp'
         >
           <PopoverHeader>Markdown Help</PopoverHeader>
           <PopoverBody>

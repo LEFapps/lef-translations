@@ -174,11 +174,11 @@ class Translate extends Component {
 }
 
 const TranslateContainer = withTranslator(
-  withTracker(({ _id, md, preventInPageEdit, translator }) => {
+  withTracker(({ _id, md, category, translator }) => {
     const language = translator.currentLanguage
     const handle = Meteor.subscribe(
       'translation',
-      { _id, md, preventInPageEdit },
+      { _id, md, category },
       language
     )
     const translation = Collection.findOne({ _id })
@@ -250,7 +250,7 @@ class Translations extends Component {
       <AdminList
         collection={Collection}
         subscription='translationsList'
-        fields={concat('_id', this.props.translator.languages)}
+        fields={concat(['_id', 'category'], this.props.translator.languages)}
         getTotalCall='totalTranslations'
         extraColumns={[doc => <TranslationEdit translation={doc} />]}
       />
