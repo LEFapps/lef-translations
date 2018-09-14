@@ -7,12 +7,12 @@ const TranslatorContext = React.createContext()
 class Translator extends Component {
   constructor (props) {
     super(props)
-
     this.state = {}
+    this.setCurrentLanguage = this.setCurrentLanguage.bind(this)
   }
-  static getDerivedStateFromProps ({ settings, user }) {
+  static getDerivedStateFromProps ({ settings, user }, { currentLanguage }) {
     let language
-    language = user ? user.profile.language : undefined
+    language = user ? user.profile.language : currentLanguage
     if (!language) {
       const navLang = (navigator.language || navigator.userLanguage).split('-')[
         0
