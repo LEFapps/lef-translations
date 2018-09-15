@@ -27,14 +27,15 @@ class Translator extends Component {
     return settings
   }
   setCurrentLanguage (language) {
-    if (this.user) {
+    if (Meteor.user()) {
       return Meteor.users.update(Meteor.user()._id, {
         $set: {
           'profile.language': language
         }
       })
+    } else {
+      this.setState({ currentLanguage: language })
     }
-    this.setState({ currentLanguage: language })
   }
   render () {
     return (

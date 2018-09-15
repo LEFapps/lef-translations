@@ -1,12 +1,7 @@
 import React from 'react'
-import {
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap'
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFlag } from '@fortawesome/free-solid-svg-icons'
+import { faFlag, faCheck } from '@fortawesome/free-solid-svg-icons'
 import fontawesome from '@fortawesome/fontawesome'
 import { withTranslator } from './Translator'
 
@@ -21,12 +16,19 @@ const PickLanguage = withTranslator(({ translator }) => {
       <DropdownMenu right>
         {translator.languages.map(language => {
           return (
-            <DropdownItem
+            <a
+              href='#'
+              className='dropdown-item'
               key={language}
-              onClick={() => translator.setCurrentLanguage(language)}
+              onClick={() => {
+                translator.setCurrentLanguage(language)
+              }}
             >
-              {language}
-            </DropdownItem>
+              {language}{' '}
+              {translator.currentLanguage === language
+                ? <FontAwesomeIcon icon={faCheck} />
+                : null}
+            </a>
           )
         })}
       </DropdownMenu>
