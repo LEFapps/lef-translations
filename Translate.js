@@ -252,7 +252,7 @@ class Translations extends Component {
         subscription='translationsList'
         fields={concat(['_id', 'category'], this.props.translator.languages)}
         getTotalCall='totalTranslations'
-        extraColumns={[doc => <TranslationEdit translation={doc} />]}
+        extraColumns={[[doc => <TranslationEdit translation={doc} />, '', []]]}
       />
     )
   }
