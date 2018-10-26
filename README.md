@@ -65,3 +65,14 @@ const Component = ({translator}) => {
 
 const ComponentContainer = withTranslator(Component)
 ```
+
+`translator` looks usually like this:
+```JS
+const translator = {
+  currentLanguage: 'nl',
+  default: 'nl',
+  languages: ['nl', 'fr', 'en'],
+  setCurrentLanguage: function(lang) {},
+  user: {} /* current user – when logged in */
+}
+```
