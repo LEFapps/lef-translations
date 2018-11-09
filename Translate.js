@@ -154,7 +154,7 @@ class Translate extends Component {
       ? markdown.render(translation)
       : translation || this.props._id
     if (getString) {
-      return text || _id
+      return text || this.props._id
     }
     return (
       <>
