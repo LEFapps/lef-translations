@@ -249,6 +249,7 @@ class Translations extends Component {
     return (
       <AdminList
         collection={Collection}
+        getIdsCall='translationIds'
         subscription='translationsList'
         fields={concat(['_id', 'category'], this.props.translator.languages)}
         getTotalCall='totalTranslations'

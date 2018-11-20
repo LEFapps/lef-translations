@@ -16,7 +16,7 @@ Meteor.publish('translationEdit', query => {
 })
 
 Meteor.publish('translationsList', (query, params) => {
-  return Collection.find(query, params)
+  return Collection.find(query)
 })
 
 Meteor.methods({
@@ -25,5 +25,8 @@ Meteor.methods({
   },
   totalTranslations: query => {
     return Collection.find(query).count()
+  },
+  translationIds: (query, params) => {
+    return Collection.find(query, params).map(({ _id }) => _id)
   }
 })
