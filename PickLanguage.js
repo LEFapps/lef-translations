@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFlag, faCheck } from '@fortawesome/free-solid-svg-icons'
 import fontawesome from '@fortawesome/fontawesome'
 import { withTranslator } from './Translator'
+import { size } from 'lodash'
 
 fontawesome.library.add(faFlag)
 
 const PickLanguage = withTranslator(({ translator }) => {
+  if (size(translator.languages) <= 1) return null
   return (
     <UncontrolledDropdown nav inNavbar>
       <DropdownToggle nav caret>
@@ -25,9 +27,9 @@ const PickLanguage = withTranslator(({ translator }) => {
               }}
             >
               {language}{' '}
-              {translator.currentLanguage === language
-                ? <FontAwesomeIcon icon={faCheck} />
-                : null}
+              {translator.currentLanguage === language ? (
+                <FontAwesomeIcon icon={faCheck} />
+              ) : null}
             </a>
           )
         })}
