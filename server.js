@@ -30,3 +30,5 @@ Meteor.methods({
     return Collection.find(query, params).map(({ _id }) => _id)
   }
 })
+
+export { Collection as TranslationsCollection }
