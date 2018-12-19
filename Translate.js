@@ -246,12 +246,14 @@ class Translations extends Component {
     this.setState(query)
   }
   render () {
+    const fields = ['_id']
+    if (!this.props.noCategories) fields.push('category')
     return (
       <AdminList
         collection={Collection}
         getIdsCall='translationIds'
         subscription='translationsList'
-        fields={concat(['_id', 'category'], this.props.translator.languages)}
+        fields={concat(fields, this.props.translator.languages)}
         getTotalCall='totalTranslations'
         extraColumns={[[doc => <TranslationEdit translation={doc} />, '', []]]}
       />
