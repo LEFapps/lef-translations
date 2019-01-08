@@ -5,6 +5,9 @@ import Collection from './Collection'
 Meteor.publish('translation', ({ _id, md, category }, language) => {
   if (!Collection.findOne(_id)) {
     Collection.insert({ _id, md, category })
+  } else {
+    md ? md = true : md = false
+    Collection.update({ _id }, { $set: { md } })
   }
   const fields = {}
   fields[language] = 1
