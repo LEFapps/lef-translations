@@ -5,8 +5,15 @@ Package.describe({
 })
 
 Package.onUse(api => {
-  api.use(['ecmascript', 'mongo', 'alanning:roles', 'lef:adminlist'])
+  api.use([
+    'ecmascript',
+    'mongo',
+    'alanning:roles',
+    'lef:adminlist',
+    'lef:imgupload'
+  ])
   api.mainModule('server.js', 'server')
+  api.addFiles('style.css', 'client')
   api.mainModule('client.js', 'client')
 })
 

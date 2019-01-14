@@ -15,11 +15,12 @@ import { Roles } from 'meteor/alanning:roles'
 import { keys, concat } from 'lodash'
 import PropTypes from 'prop-types'
 import MarkdownIt from 'markdown-it'
+import AdminList from 'meteor/lef:adminlist'
+import { MarkdownImageUpload } from 'meteor/lef:imgupload'
+
 import { withTranslator } from './Translator'
 import Collection from './Collection'
-
 import MarkdownHelp from './MarkdownHelp'
-import AdminList from 'meteor/lef:adminlist'
 
 const markdown = MarkdownIt({
   html: true,
@@ -64,6 +65,13 @@ class TranslationModal extends Component {
       }
     })
   }
+  onUpload (language) {
+    return url => {
+      let text = this.state[language]
+      text += url
+      this.setState({ [language]: text })
+    }
+  }
   render () {
     const { loading, open, toggle, translator } = this.props
     const translation = this.state
@@ -79,28 +87,36 @@ class TranslationModal extends Component {
               return (
                 <div className='col' key={language}>
                   <h6>{language}</h6>
-                  {translation.md
-                    ? <div>
+                  {translation.md ? (
+                    <div>
                       <Input
                         type='textarea'
                         value={translation[language]}
                         onChange={e => this.handleChange(e, language)}
                         rows='10'
                       />
+                      <MarkdownImageUpload
+                        onSubmit={this.onUpload(language)}
+                        sizes={[256, 512]}
+                        label={'Upload je profielfoto'}
+                        placeholder={'Optional'}
+                      />
                       <hr />
+
                       <div
+                        className='translator-preview'
                         dangerouslySetInnerHTML={{
-                          __html: markdown.render(
-                            translation[language] || ''
-                          )
+                          __html: markdown.render(translation[language] || '')
                         }}
                       />
                     </div>
-                    : <Input
+                  ) : (
+                    <Input
                       type='text'
                       value={translation[language] || ''}
                       onChange={e => this.handleChange(e, language)}
-                    />}
+                    />
+                  )}
                 </div>
               )
             })}
@@ -150,9 +166,10 @@ class Translate extends Component {
   render () {
     const { loading, translation, getString } = this.props
     if (loading) return null
-    const text = this.props.md && translation
-      ? markdown.render(translation)
-      : translation || this.props._id
+    const text =
+      this.props.md && translation
+        ? markdown.render(translation)
+        : translation || this.props._id
     if (getString) {
       return text || this.props._id
     }
