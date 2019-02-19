@@ -164,8 +164,9 @@ class Translate extends Component {
     }
   }
   render () {
-    const { loading, translation, getString } = this.props
+    const { loading, translation, getString, tag, className } = this.props
     if (loading) return null
+    const TagName = tag || 'span'
     const text =
       this.props.md && translation
         ? markdown.render(translation)
@@ -180,8 +181,8 @@ class Translate extends Component {
           toggle={this.toggleEditing}
           open={this.state.editing}
         />
-        <span
-          className='translation'
+        <TagName
+          className={'translation' + (className || '')}
           dangerouslySetInnerHTML={{ __html: text }}
           onDoubleClick={this.toggleEditing}
         />
