@@ -1,6 +1,6 @@
 {
   "name": "lef-translations",
-  "version": "2.2.11",
+  "version": "2.3.1",
   "description": "Translation utilities",
   "scripts": {
     "sync": "mongo localhost:3001/meteor scripts/sync.js"

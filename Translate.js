@@ -182,7 +182,7 @@ class Translate extends Component {
           open={this.state.editing}
         />
         <TagName
-          className={'translation' + (className || '')}
+          className={'translation ' + (className || '')}
           dangerouslySetInnerHTML={{ __html: text }}
           onDoubleClick={this.toggleEditing}
         />
