@@ -164,8 +164,16 @@ class Translate extends Component {
     }
   }
   render () {
-    const { loading, translation, getString, tag, className } = this.props
+    const {
+      loading,
+      translation,
+      getString,
+      tag,
+      className,
+      autoHide
+    } = this.props
     if (loading) return null
+    if (autoHide && !translation) return null
     const TagName = tag || 'span'
     const text =
       this.props.md && translation
@@ -213,7 +221,8 @@ TranslateContainer.propTypes = {
   _id: PropTypes.string.isRequired,
   md: PropTypes.bool,
   getString: PropTypes.bool,
-  preventInPageEdit: PropTypes.bool
+  preventInPageEdit: PropTypes.bool,
+  autoHide: PropTypes.bool
 }
 
 class TranslationEdit extends Component {
