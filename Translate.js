@@ -16,11 +16,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Roles } from 'meteor/alanning:roles'
-import { keys, concat, forEach, size } from 'lodash'
+import { keys, concat, forEach, size, merge } from 'lodash'
 import PropTypes from 'prop-types'
 import MarkdownIt from 'markdown-it'
 import AdminList from 'meteor/lef:adminlist'
-import { MarkdownImageUpload } from 'meteor/lef:imgupload'
 
 import { withTranslator } from './Translator'
 import Collection from './Collection'
@@ -82,11 +81,26 @@ class TranslationModal extends Component {
   constructor (props) {
     super(props)
     const state = props.translation || false
-    this.state = state
+    this.state = merge(state, { MarkdownImageUpload: false })
     this.save = this.save.bind(this)
     this.toggleUpload = this.toggleUpload.bind(this)
     this.insertParam = this.insertParam.bind(this)
     this.rememberCursorPosition = this.rememberCursorPosition.bind(this)
+    this.loadUploader = this.loadUploader.bind(this)
+    this.loadUploader('meteor/lef:imgupload')
+  }
+  loadUploader (uploader) {
+    import(uploader)
+      .then(({ MarkdownImageUpload }) => {
+        this.setState({ MarkdownImageUpload })
+      })
+      .catch(e =>
+        console.warn(
+          'Uploader: ',
+          e,
+          'run "meteor add lef:imgupload" if this module is missing'
+        )
+      )
   }
   handleChange (e, language) {
     this.setState({ [language]: e.target.value })
@@ -99,7 +113,7 @@ class TranslationModal extends Component {
     this.setState({ upload: !this.state.upload })
   }
   save () {
-    const { cursorPos, ...state } = this.state
+    const { cursorPos, MarkdownImageUpload, ...state } = this.state
     Meteor.call('updateTranslation', state, (error, result) => {
       if (result) {
         this.props.toggle()
@@ -142,7 +156,7 @@ class TranslationModal extends Component {
   }
   render () {
     const { loading, open, toggle, translator, upload } = this.props
-    const translation = this.state
+    const { MarkdownImageUpload, cursorPos, ...translation } = this.state
     // {sizes: [256, 512], label: 'Upload je profielfoto', placeholder: 'Optional'}
     const uploadProps = upload || {}
     if (loading || !translation) return null
@@ -175,10 +189,14 @@ class TranslationModal extends Component {
                           />
                         ) : null}
                       </InputGroup>
-                      <MarkdownImageUpload
-                        onSubmit={this.onUpload(language)}
-                        {...uploadProps}
-                      />
+                      {MarkdownImageUpload ? (
+                        <MarkdownImageUpload
+                          onSubmit={this.onUpload(language)}
+                          {...uploadProps}
+                        />
+                      ) : (
+                        'Initialising uploader ...'
+                      )}
                       <hr />
 
                       <div
