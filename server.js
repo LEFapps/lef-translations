@@ -1,17 +1,31 @@
 import { Meteor } from 'meteor/meteor'
+import { set, keys, size, difference } from 'lodash'
 
 import Collection from './Collection'
 
-Meteor.publish('translation', ({ _id, md, category }, language) => {
-  if (!Collection.findOne(_id)) {
-    Collection.insert({ _id, md, category })
-  } else {
-    md ? md = true : md = false
-    Collection.update({ _id }, { $set: { md } })
-  }
+Meteor.publish('translation', ({ _id, md, category, params }, language) => {
   const fields = {}
   fields[language] = 1
-  return Collection.find({ _id }, { fields })
+  const cursor = Collection.find(_id)
+  const translation = cursor.fetch()[0]
+  if (!translation) {
+    Collection.insert({ _id, md, category, params })
+  } else {
+    const modifier = {}
+    if (md !== translation.md) {
+      md ? set(modifier, '$set.md', md) : set(modifier, '$unset.md', '')
+    }
+    const newParams = difference(keys(params), translation.params)
+    if (newParams.length) {
+      newParams.forEach(param => set(modifier, '$addToSet.params', param))
+    }
+    // maybe update category here too (for rare cases?)
+    if (size(modifier) && _id) {
+      console.log(`Translation ${_id} updated with ${JSON.stringify(modifier)}`)
+      Collection.update(_id, modifier)
+    }
+  }
+  return Collection.find(_id, { fields })
 })
 
 Meteor.publish('translationEdit', query => {

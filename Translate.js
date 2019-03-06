@@ -5,14 +5,19 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Input
+  Input,
+  InputGroup,
+  InputGroupButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Roles } from 'meteor/alanning:roles'
-import { keys, concat } from 'lodash'
+import { keys, concat, forEach, size } from 'lodash'
 import PropTypes from 'prop-types'
 import MarkdownIt from 'markdown-it'
 import AdminList from 'meteor/lef:adminlist'
@@ -39,6 +44,41 @@ const TranslationModalContainer = props => {
   )
 }
 
+class InsertParams extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      dropdownOpen: false
+    }
+  }
+  render () {
+    const { params, insertParam, where } = this.props
+    return (
+      <InputGroupButtonDropdown
+        addonType='append'
+        isOpen={this.state.dropdownOpen}
+        toggle={() => this.setState({ dropdownOpen: !this.state.dropdownOpen })}
+      >
+        <DropdownToggle caret color={'info'}>
+          <Translate _id='insert' category='admin' />
+        </DropdownToggle>
+        <DropdownMenu right>
+          {params.map(param => {
+            return (
+              <DropdownItem
+                onClick={() => insertParam(param, where)}
+                key={param}
+              >
+                <Translate _id={param} category='admin' />
+              </DropdownItem>
+            )
+          })}
+        </DropdownMenu>
+      </InputGroupButtonDropdown>
+    )
+  }
+}
+
 class TranslationModal extends Component {
   constructor (props) {
     super(props)
@@ -46,9 +86,12 @@ class TranslationModal extends Component {
     this.state = state
     this.save = this.save.bind(this)
     this.toggleUpload = this.toggleUpload.bind(this)
+    this.insertParam = this.insertParam.bind(this)
+    this.rememberCursorPosition = this.rememberCursorPosition.bind(this)
   }
   handleChange (e, language) {
     this.setState({ [language]: e.target.value })
+    this.rememberCursorPosition(e)
   }
   handleUpload (result) {
     console.log(result)
@@ -57,7 +100,8 @@ class TranslationModal extends Component {
     this.setState({ upload: !this.state.upload })
   }
   save () {
-    Meteor.call('updateTranslation', this.state, (error, result) => {
+    const { cursorPos, ...state } = this.state
+    Meteor.call('updateTranslation', state, (error, result) => {
       if (result) {
         this.props.toggle()
       } else {
@@ -72,9 +116,36 @@ class TranslationModal extends Component {
       this.setState({ [language]: text })
     }
   }
+  rememberCursorPosition ({ target }) {
+    this.setState({
+      cursorPos: [target.selectionStart, target.selectionEnd]
+    })
+  }
+  insertParam (param, language) {
+    const { cursorPos } = this.state
+    const value = `${this.state[language]} `
+    const state = {}
+    state[language] = size(cursorPos)
+      ? value.substring(0, cursorPos[0]) +
+        `{{${param}}}` +
+        value.substring(cursorPos[1])
+      : `${value}{{${param}}}`
+    this.setState(state, () => {
+      const input = document.getElementsByName(language)[0]
+      if (input) {
+        input.focus()
+        if (cursorPos.length) {
+          input.selectionStart = input.selectionEnd =
+            cursorPos[0] + `{{${param}}}`.length
+        }
+      }
+    })
+  }
   render () {
-    const { loading, open, toggle, translator } = this.props
+    const { loading, open, toggle, translator, upload } = this.props
     const translation = this.state
+    // {sizes: [256, 512], label: 'Upload je profielfoto', placeholder: 'Optional'}
+    const uploadProps = upload || {}
     if (loading || !translation) return null
     return (
       <Modal isOpen={open} toggle={toggle} size='lg'>
@@ -89,17 +160,25 @@ class TranslationModal extends Component {
                   <h6>{language}</h6>
                   {translation.md ? (
                     <div>
-                      <Input
-                        type='textarea'
-                        value={translation[language]}
-                        onChange={e => this.handleChange(e, language)}
-                        rows='10'
-                      />
+                      <InputGroup>
+                        <Input
+                          rows='10'
+                          type='textarea'
+                          name={language}
+                          value={translation[language]}
+                          onChange={e => this.handleChange(e, language)}
+                        />
+                        {translation.params ? (
+                          <InsertParams
+                            params={translation.params}
+                            insertParam={this.insertParam}
+                            where={language}
+                          />
+                        ) : null}
+                      </InputGroup>
                       <MarkdownImageUpload
                         onSubmit={this.onUpload(language)}
-                        sizes={[256, 512]}
-                        label={'Upload je profielfoto'}
-                        placeholder={'Optional'}
+                        {...uploadProps}
                       />
                       <hr />
 
@@ -111,11 +190,21 @@ class TranslationModal extends Component {
                       />
                     </div>
                   ) : (
-                    <Input
-                      type='text'
-                      value={translation[language] || ''}
-                      onChange={e => this.handleChange(e, language)}
-                    />
+                    <InputGroup>
+                      <Input
+                        type='text'
+                        name={language}
+                        value={translation[language] || ''}
+                        onChange={e => this.handleChange(e, language)}
+                      />
+                      {translation.params ? (
+                        <InsertParams
+                          params={translation.params}
+                          insertParam={this.insertParam}
+                          where={language}
+                        />
+                      ) : null}
+                    </InputGroup>
                   )}
                 </div>
               )
@@ -170,15 +259,21 @@ class Translate extends Component {
       getString,
       tag,
       className,
-      autoHide
+      autoHide,
+      params
     } = this.props
     if (loading) return null
     if (autoHide && !translation) return null
     const TagName = tag || 'span'
+    let withParams = translation || ''
+    forEach(params, (value, key) => {
+      const pattern = new RegExp(`{{${key}}}`, 'g')
+      withParams = withParams.replace(pattern, value)
+    })
     const text =
-      this.props.md && translation
-        ? markdown.render(translation)
-        : translation || this.props._id
+      this.props.md && withParams
+        ? markdown.render(withParams)
+        : withParams || this.props._id
     if (getString) {
       return text || this.props._id
     }
@@ -190,7 +285,7 @@ class Translate extends Component {
           open={this.state.editing}
         />
         <TagName
-          className={'translation ' + (className || '')}
+          className={'translation' + (className ? ' ' + className : '')}
           dangerouslySetInnerHTML={{ __html: text }}
           onDoubleClick={this.toggleEditing}
         />
@@ -200,11 +295,11 @@ class Translate extends Component {
 }
 
 const TranslateContainer = withTranslator(
-  withTracker(({ _id, md, category, translator }) => {
+  withTracker(({ _id, md, category, params, translator }) => {
     const language = translator.currentLanguage
     const handle = Meteor.subscribe(
       'translation',
-      { _id, md, category },
+      { _id, md, category, params },
       language
     )
     const translation = Collection.findOne({ _id })
@@ -222,7 +317,9 @@ TranslateContainer.propTypes = {
   md: PropTypes.bool,
   getString: PropTypes.bool,
   preventInPageEdit: PropTypes.bool,
-  autoHide: PropTypes.bool
+  autoHide: PropTypes.bool,
+  params: PropTypes.object,
+  upload: PropTypes.object
 }
 
 class TranslationEdit extends Component {
@@ -282,7 +379,7 @@ class Translations extends Component {
         subscription='translationsList'
         fields={concat(fields, this.props.translator.languages)}
         getTotalCall='totalTranslations'
-        extraColumns={[[doc => <TranslationEdit translation={doc} />, '', []]]}
+        extraColumns={[{ value: doc => <TranslationEdit translation={doc} /> }]}
       />
     )
   }
