@@ -1,8 +1,6 @@
 import React from 'react'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFlag, faCheck } from '@fortawesome/free-solid-svg-icons'
-import fontawesome from '@fortawesome/fontawesome'
 import { withTranslator } from './Translator'
 import { size } from 'lodash'
 
@@ -28,7 +26,7 @@ const PickLanguage = withTranslator(({ translator }) => {
             >
               {language}{' '}
               {translator.currentLanguage === language ? (
-                <FontAwesomeIcon icon={faCheck} />
+                <FontAwesomeIcon icon={'check'} />
               ) : null}
             </a>
           )

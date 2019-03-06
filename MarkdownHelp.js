@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 class MarkdownHelp extends Component {
   constructor (props) {
@@ -20,7 +19,7 @@ class MarkdownHelp extends Component {
     return (
       <span id='markdownhelp'>
         <Button outline color='warning' onClick={this.toggle}>
-          <FontAwesomeIcon icon={faQuestion} />
+          <FontAwesomeIcon icon={'question'} />
         </Button>
         <Popover
           placement='auto'

@@ -13,7 +13,6 @@ import {
   DropdownItem
 } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { Meteor } from 'meteor/meteor'
 import { withTracker } from 'meteor/react-meteor-data'
 import { Roles } from 'meteor/alanning:roles'
@@ -150,7 +149,7 @@ class TranslationModal extends Component {
     return (
       <Modal isOpen={open} toggle={toggle} size='lg'>
         <ModalHeader toggle={toggle}>
-          <FontAwesomeIcon icon={faEdit} /> {translation._id}
+          <FontAwesomeIcon icon={'edit'} /> {translation._id}
         </ModalHeader>
         <ModalBody>
           <div className='row'>
@@ -214,10 +213,10 @@ class TranslationModal extends Component {
         <ModalFooter>
           {translation.md ? <MarkdownHelp /> : null}
           <Button onClick={this.save} color='success'>
-            <FontAwesomeIcon icon={faCheck} />
+            <FontAwesomeIcon icon={'check'} />
           </Button>
           <Button onClick={toggle} color='danger'>
-            <FontAwesomeIcon icon={faTimes} />
+            <FontAwesomeIcon icon={'times'} />
           </Button>
         </ModalFooter>
       </Modal>
@@ -342,7 +341,7 @@ class TranslationEdit extends Component {
           open={this.state.editing}
         />
         <Button onClick={this.toggleEditing} size='sm' outline>
-          <FontAwesomeIcon icon={faEdit} />
+          <FontAwesomeIcon icon={'edit'} />
         </Button>
       </div>
     )

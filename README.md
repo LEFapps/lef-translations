@@ -4,7 +4,12 @@ Meteor React package for translations and CMS.
 
 ## Installation
 
-Git clone this repository into your projects `packages` folder and `meteor add lef:translations`.
+
+1. Add this repo as a git submodule in the `/packages` repository
+1. `$ meteor add lef:translations`
+1. Make sure the following icons are in your **fontawesome library**:
+  `faQuestion, faFlag, faCheck, faEdit, faTimes`<br>
+  (Using an [icons helper file*](#icons-helper-file) is recommended.)
 
 ## Wrapper
 
@@ -75,4 +80,14 @@ const translator = {
   setCurrentLanguage: function(lang) {},
   user: {} /* current user – when logged in */
 }
+```
+
+## Icons helper file
+
+Import a file with this structure on startup:
+
+```JS
+import { library } from '@fortawesome/fontawesome'
+import { ...icons } from '@fortawesome/free-solid-svg-icons'
+library.add(...icons)
 ```
