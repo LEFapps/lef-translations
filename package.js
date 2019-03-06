@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Translations/CMS for Meteor/React',
-  version: '2.5.0',
+  version: '2.5.1',
   name: 'lef:translations'
 })
 
