@@ -9,7 +9,7 @@ Meteor.publish('translation', ({ _id, md, category, params }, language) => {
   const cursor = Collection.find(_id)
   const translation = cursor.fetch()[0]
   if (!translation) {
-    Collection.insert({ _id, md, category, params })
+    Collection.insert({ _id, md, category, params: keys(params) })
   } else {
     const modifier = {}
     if (md !== translation.md) {
