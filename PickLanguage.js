@@ -4,8 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { withTranslator } from './Translator'
 import { size } from 'lodash'
 
-fontawesome.library.add(faFlag)
-
 const PickLanguage = withTranslator(({ translator }) => {
   if (size(translator.languages) <= 1) return null
   return (
