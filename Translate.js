@@ -78,6 +78,7 @@ class InsertParams extends React.Component {
 }
 
 class TranslationModal extends Component {
+  _isMounted = false
   constructor (props) {
     super(props)
     const state = props.translation || false
@@ -88,14 +89,18 @@ class TranslationModal extends Component {
     this.rememberCursorPosition = this.rememberCursorPosition.bind(this)
     this.loadUploader = this.loadUploader.bind(this)
   }
-  componentWillMount () {
+  componentDidMount () {
+    this._isMounted = true
     this.loadUploader('meteor/lef:imgupload')
+  }
+  componentWillUnmount () {
+    this._isMounted = false
   }
   loadUploader (uploader) {
     import(uploader)
-      .then(({ MarkdownImageUpload }) => {
-        this.setState({ MarkdownImageUpload })
-      })
+      .then(({ MarkdownImageUpload }) =>
+        this._isMounted ? this.setState({ MarkdownImageUpload }) : null
+      )
       .catch(e =>
         console.warn(
           'Uploader: ',

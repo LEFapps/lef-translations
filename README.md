@@ -87,7 +87,7 @@ const translator = {
 Import a file with this structure on startup:
 
 ```JS
-import { library } from '@fortawesome/fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
 import { ...icons } from '@fortawesome/free-solid-svg-icons'
 library.add(...icons)
 ```
