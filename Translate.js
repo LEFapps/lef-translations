@@ -87,6 +87,8 @@ class TranslationModal extends Component {
     this.insertParam = this.insertParam.bind(this)
     this.rememberCursorPosition = this.rememberCursorPosition.bind(this)
     this.loadUploader = this.loadUploader.bind(this)
+  }
+  componentWillMount () {
     this.loadUploader('meteor/lef:imgupload')
   }
   loadUploader (uploader) {
