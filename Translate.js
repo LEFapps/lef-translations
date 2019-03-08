@@ -154,7 +154,7 @@ class TranslationModal extends Component {
       const input = document.getElementsByName(language)[0]
       if (input) {
         input.focus()
-        if (cursorPos.length) {
+        if (cursorPos && cursorPos.length) {
           input.selectionStart = input.selectionEnd =
             cursorPos[0] + `{{${param}}}`.length
         }
