@@ -305,6 +305,7 @@ class Translate extends Component {
       <>
         <ModalContainer
           translation={this.props}
+          upload={this.props.upload}
           toggle={this.toggleEditing}
           open={this.state.editing}
         />
