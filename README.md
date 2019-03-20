@@ -30,7 +30,7 @@ const languageSettings = {
 
 ## Text component
 
-Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support). Set `getString` to only get the translation string returned. Default a `<span>` will be returned, but thiscan be overridden with the `tag` prop. Optionally use the `category` prop to classify translations and make the admin overview clearer. Extra classes canbe added through the prop `className`. The `_id` is diplayed by default if no translation is available. You can override this by setting the prop `autoHide`. Use the `params` prop to use placeholders in the translation.
+Use the `<Translate />` React component to insert text in the app. Editing the translation is possible by double clicking on it while logged in as admin. Optionally use `md` to set as a textfield (with markdown support). Set `getString` to return the translation as a string. Default a `<span>` will be returned, but this can be overridden with the `tag` prop. Optionally use the `category` prop to classify translations and make the admin overview clearer. Extra classes canbe added through the prop `className`. The `_id` is diplayed by default if no translation is available. You can override this by setting the prop `autoHide`. Use the `params` prop to use placeholders in the translation.
 
 ```JSX
 import { Translate } from 'meteor/lef:translations'
@@ -84,10 +84,13 @@ const translator = {
 
 ## Icons helper file
 
-Import a file with this structure on startup:
+Import a file with this structure on startup, lef:translations needs these icons:
 
 ```JS
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { ...icons } from '@fortawesome/free-solid-svg-icons'
-library.add(...icons)
+
+import { faFlag } from '@fortawesome/free-solid-svg-icons/faFlag'
+// ...etc
+
+library.add(faQuestion, faFlag, faCheck, faEdit, faTimes, faPlus, faAlignLeft, faEye)
 ```

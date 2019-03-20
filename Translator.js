@@ -7,16 +7,19 @@ const TranslatorContext = React.createContext()
 class Translator extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      translations: {}
+    }
     this.setCurrentLanguage = this.setCurrentLanguage.bind(this)
+    this.getTranslation = this.getTranslation.bind(this)
   }
   static getDerivedStateFromProps ({ settings, user }, { currentLanguage }) {
     let language
     language = user ? user.profile.language : currentLanguage
     if (!language) {
-      const navLang = (navigator.language || navigator.userLanguage).split('-')[
-        0
-      ]
+      const navLang = (navigator.language || navigator.userLanguage).split(
+        '-'
+      )[0]
       if (settings.languages.includes(navLang)) {
         language = navLang
       } else {
@@ -27,14 +30,45 @@ class Translator extends Component {
     return settings
   }
   setCurrentLanguage (language) {
+    console.log('setting language')
     if (Meteor.user()) {
-      return Meteor.users.update(Meteor.user()._id, {
+      Meteor.users.update(Meteor.user()._id, {
         $set: {
           'profile.language': language
         }
       })
     } else {
       this.setState({ currentLanguage: language })
+    }
+    console.log(Object.keys(this.state.translations))
+    Object.keys(this.state.translations).map(_id => {
+      this.getTranslation(
+        { _id },
+        { language, skipSettings: true, forceUpdate: true }
+      )
+    })
+  }
+  getTranslation (props, params = {}) {
+    const { skipSettings, forceUpdate } = params
+    const { translations, currentLanguage } = this.state
+    const language = params.language || currentLanguage
+    const { _id } = props
+    if (translations[_id] && translations[_id][language] && !forceUpdate) {
+      return translations[_id][language] || _id
+    } else {
+      Meteor.call(
+        'getTranslation',
+        props,
+        { language: language, skipSettings },
+        (e, r) => {
+          if (r) {
+            translations[_id] = r
+            this.setState({ translations })
+          } else {
+            console.error(e)
+          }
+        }
+      )
     }
   }
   render () {
@@ -44,7 +78,8 @@ class Translator extends Component {
           translator: {
             ...this.state,
             setCurrentLanguage: this.setCurrentLanguage,
-            user: this.props.user
+            user: this.props.user,
+            getTranslation: this.getTranslation
           }
         }}
       >

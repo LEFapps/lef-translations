@@ -1,5 +1,6 @@
 import { Translator, withTranslator } from './Translator'
-import { Translate, Translations } from './Translate'
+import Translate from './Translate'
+import Translations from './Translations'
 import PickLanguage from './PickLanguage'
 import MarkdownHelp from './MarkdownHelp'
 
