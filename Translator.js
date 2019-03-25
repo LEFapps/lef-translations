@@ -30,7 +30,6 @@ class Translator extends Component {
     return settings
   }
   setCurrentLanguage (language) {
-    console.log('setting language')
     if (Meteor.user()) {
       Meteor.users.update(Meteor.user()._id, {
         $set: {
@@ -40,7 +39,6 @@ class Translator extends Component {
     } else {
       this.setState({ currentLanguage: language })
     }
-    console.log(Object.keys(this.state.translations))
     Object.keys(this.state.translations).map(_id => {
       this.getTranslation(
         { _id },
@@ -53,9 +51,8 @@ class Translator extends Component {
     const { translations, currentLanguage } = this.state
     const language = params.language || currentLanguage
     const { _id } = props
-    if (translations[_id] && translations[_id][language] && !forceUpdate) {
-      return translations[_id][language] || _id
-    } else {
+    if (!translations[_id] || forceUpdate) {
+      translations[_id] = true
       Meteor.call(
         'getTranslation',
         props,
@@ -63,10 +60,10 @@ class Translator extends Component {
         (e, r) => {
           if (r) {
             translations[_id] = r
-            this.setState({ translations })
           } else {
             console.error(e)
           }
+          this.setState({ translations })
         }
       )
     }

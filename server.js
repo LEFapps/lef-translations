@@ -22,6 +22,7 @@ Meteor.methods({
     if (!skipSettings) {
       if (!translation) {
         Collection.insert({ _id, md, category, params: keys(params) })
+        return { _id }
       } else {
         const modifier = {}
         if (md !== translation.md) {
