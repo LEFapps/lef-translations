@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Meteor } from 'meteor/meteor'
-import { Roles } from 'meteor/alanning:roles'
 import forEach from 'lodash/forEach'
 import PropTypes from 'prop-types'
 
@@ -21,10 +19,7 @@ class Translate extends Component {
     translator.getTranslation(props)
   }
   toggleEditing () {
-    if (
-      Roles.userIsInRole(Meteor.userId(), 'admin') &&
-      !this.props.preventInPageEdit
-    ) {
+    if (this.props.translator.allowEditing() && !this.props.preventInPageEdit) {
       this.setState({ editing: !this.state.editing })
     }
   }

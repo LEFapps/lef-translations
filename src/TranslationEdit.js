@@ -100,18 +100,18 @@ class TranslationModal extends Component {
   }
   save () {
     const { cursorPos, MarkdownImageUpload, ...state } = this.state
-    Meteor.call('updateTranslation', state, (error, result) => {
-      if (result) {
+    this.props.translator
+      .updateTranslation(state)
+      .then(result => {
+        // TODO: use result to update translator.translations
         this.props.toggle()
         const {
           translation: { _id },
           translator: { getTranslation }
         } = this.props
         getTranslation({ _id }, { skipSettings: true, forceUpdate: true })
-      } else {
-        alert(JSON.stringify(error))
-      }
-    })
+      })
+      .catch(error => alert(JSON.stringify(error)))
   }
   onUpload (language) {
     return url => {

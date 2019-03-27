@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Meteor } from 'meteor/meteor'
-import { withTracker } from 'meteor/react-meteor-data'
+import PropTypes from 'prop-types'
 
 const TranslatorContext = React.createContext()
 
@@ -75,7 +74,6 @@ class Translator extends Component {
           translator: {
             ...this.state,
             setCurrentLanguage: this.setCurrentLanguage,
-            user: this.props.user,
             getTranslation: this.getTranslation
           }
         }}
@@ -86,9 +84,17 @@ class Translator extends Component {
   }
 }
 
-const TranslatorContainer = withTracker(() => {
-  return { user: Meteor.user() }
-})(Translator)
+Translator.propTypes = {
+  settings: PropTypes.shape({
+    languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    default: PropTypes.string.isRequired
+  }),
+  getTranslationCall: PropTypes.func.isRequired,
+  setUserLanguage: PropTypes.func,
+  getUserLanguage: PropTypes.func,
+  allowEditing: PropTypes.func.isRequired,
+  updateTranslation: PropTypes.func.isRequired
+}
 
 const withTranslator = Component => {
   return function TranslatorComponent (props) {
@@ -100,4 +106,4 @@ const withTranslator = Component => {
   }
 }
 
-export { TranslatorContainer as Translator, withTranslator }
+export { Translator, withTranslator }

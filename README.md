@@ -18,12 +18,20 @@ Use the HOC to wrap your application, or at least the parts that need translatio
 ```JSX
 import { Translator } from 'meteor/lef:translations'
 
-const languageSettings = {
-  languages: ['nl', 'fr'],
-  default: 'nl'
+const props = {
+  settings: {
+    languages: ['nl', 'fr'],
+    default: 'nl',
+  },
+  getTranslation: (id) => {}, // should return translation object or undefined
+  getFullTranslation: (id) => {},
+  setUserLanguage: (lang) => {}, // sets a language to a user object
+  getUserLanguage: (lang) => {}, // gets the language of the current logged in user
+  allowEditing: () => {}, // checks if editing a translation is allowed, should return a boolean
+  updateTranslation: doc => {} // updates a translation where translations are kept, should return a promise returning a translation object
 }
 
-<Translator settings={languageSettings}>
+<Translator {...props}>
   // your app code
 </Translator>
 ```
