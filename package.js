@@ -1,13 +1,18 @@
 Package.describe({
   summary: 'Translations/CMS for Meteor/React',
-  version: '2.7.1',
+  version: '2.7.2',
   name: 'lef:translations'
 })
 
 Package.onUse(api => {
-  api.use(['ecmascript', 'mongo', 'alanning:roles', 'lef:adminlist'])
+  api.use([
+    'ecmascript',
+    'mongo',
+    'alanning:roles',
+    'lef:adminlist',
+    'deanius:promise'
+  ])
   api.mainModule('server.js', 'server')
-  api.addFiles('style.css', 'client')
   api.mainModule('client.js', 'client')
 })
 

@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import concat from 'lodash/concat'
 import AdminList from 'meteor/lef:adminlist'
 import { Button } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { withTranslator } from './Translator'
 import Collection from './Collection'
 
-import TranslationEdit from './TranslationEdit'
+import { withTranslator, TranslationEdit } from '@lefapps/translations'
 
 class Edit extends Component {
   constructor (props) {
@@ -23,11 +21,13 @@ class Edit extends Component {
   render () {
     return (
       <div>
-        <TranslationEdit
-          translation={this.props.translation}
-          toggle={this.toggleEditing}
-          open={this.state.editing}
-        />
+        {this.state.editing ? (
+          <TranslationEdit
+            translation={this.props.translation}
+            toggle={this.toggleEditing}
+            open={this.state.editing}
+          />
+        ) : null}
         <Button onClick={this.toggleEditing} size='sm' outline>
           <FontAwesomeIcon icon={'edit'} />
         </Button>

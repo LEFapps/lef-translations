@@ -12,14 +12,14 @@ Meteor.publish('translationsList', (query, params) => {
 })
 
 Meteor.methods({
-  getTranslation: (
-    { _id, md, category, params },
-    { language, skipSettings = false }
-  ) => {
+  getTranslation: ({ _id, md, category, params }, args = {}) => {
+    if (!args.language) {
+      return Collection.findOne(_id)
+    }
     const fields = {}
-    fields[language] = 1
+    fields[args.language] = 1
     const translation = Collection.findOne(_id)
-    if (!skipSettings) {
+    if (!args.skipSettings) {
       if (!translation) {
         Collection.insert({ _id, md, category, params: keys(params) })
         return { _id }
@@ -43,9 +43,6 @@ Meteor.methods({
     }
     Collection.update(_id, { $inc: { views: 1 } })
     return Collection.findOne(_id, { fields })
-  },
-  getFullTranslation: _id => {
-    return Collection.findOne(_id)
   },
   updateTranslation: update => {
     return Collection.update(update._id, { $set: update })

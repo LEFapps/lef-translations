@@ -1,9 +1,10 @@
-import { Translator, withTranslator } from './Translator'
-import Translate from './Translate'
+import Translator, { withTranslator } from './TranslatorWrapper'
+import Translate from '@lefapps/translations'
 import Translations from './Translations'
-import PickLanguage from './PickLanguage'
-import MarkdownHelp from './MarkdownHelp'
+import { PickLanguage } from '@lefapps/translations'
+import { MarkdownHelp } from '@lefapps/translations'
 
+export default Translate
 export {
   Translator,
   withTranslator,
