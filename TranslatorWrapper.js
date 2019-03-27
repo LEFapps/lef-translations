@@ -1,6 +1,8 @@
 import React from 'react'
 import { Translator, withTranslator } from '@lefapps/translations'
 import { Roles } from 'meteor/alanning:roles'
+import { Meteor } from 'meteor/meteor'
+import { MarkdownImageUpload } from 'meteor/lef:imgupload'
 
 const TranslatorWrapper = ({ children, ...props }) => {
   Object.assign(props, {
@@ -24,6 +26,9 @@ const TranslatorWrapper = ({ children, ...props }) => {
     },
     getUserLanguage: () => {
       return Meteor.user() ? Meteor.user().profile.language : undefined
+    },
+    MarkdownImageUpload: props => {
+      return <MarkdownImageUpload {...props} />
     }
   })
   return <Translator {...props}>{children}</Translator>

@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Translations/CMS for Meteor/React',
-  version: '2.7.2',
+  version: '2.7.3',
   name: 'lef:translations'
 })
 
@@ -10,7 +10,8 @@ Package.onUse(api => {
     'mongo',
     'alanning:roles',
     'lef:adminlist',
-    'deanius:promise'
+    'deanius:promise',
+    'lef:imgupload'
   ])
   api.mainModule('server.js', 'server')
   api.mainModule('client.js', 'client')
