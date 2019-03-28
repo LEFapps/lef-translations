@@ -1,6 +1,6 @@
 # Translations/CMS
 
-Meteor React package for translations and CMS.
+Meteor React package for translations and CMS. This package wraps the npm package @lefapps/translations and adds Meteor specific functions.
 
 ## Installation
 
