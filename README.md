@@ -20,7 +20,11 @@ import { Translator } from 'meteor/lef:translations'
 
 const languageSettings = {
   languages: ['nl', 'fr'],
-  default: 'nl'
+  default: 'nl',
+  titles: {
+    nl: 'Nederlands',
+    fr: 'Français'
+  }
 }
 
 <Translator settings={languageSettings}>
