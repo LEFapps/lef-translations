@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import Collection from './Collection'
 
-import { withTranslator, TranslationEdit } from '@lefapps/translations'
+import {
+  withTranslator,
+  TranslationEdit,
+  Translate
+} from '@lefapps/translations'
 
 class Edit extends Component {
   constructor (props) {
@@ -85,14 +89,26 @@ class Translations extends Component {
       value: doc => <Edit translation={doc} />
     })
     return (
-      <AdminList
-        collection={Collection}
-        getIdsCall='translationIds'
-        subscription='translationsList'
-        fields={fields}
-        getTotalCall='totalTranslations'
-        extraColumns={extraColumns}
-      />
+      <>
+        <header className='admin-board__head'>
+          <Translate
+            _id='translations'
+            category='admin'
+            tag='h2'
+            className='admin-board__head-title'
+          />
+        </header>
+        <section className='admin-board__body'>
+          <AdminList
+            collection={Collection}
+            getIdsCall='translationIds'
+            subscription='translationsList'
+            fields={fields}
+            getTotalCall='totalTranslations'
+            extraColumns={extraColumns}
+          />
+        </section>
+      </>
     )
   }
 }
