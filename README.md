@@ -48,12 +48,12 @@ Insert the `<Translations />` React component in an admin interface to edit all 
 
 ## Pick language menu
 
-This creates a bootstrap uncontrolled dropdown menu for use in a `nav` element.
+This creates a bootstrap uncontrolled dropdown menu for use in a `nav` element. Set the `showTitle` flag to show language titles (set in settings) instead of a flag icon.
 
 ```JSX
 import { PickLanguage } from 'meteor/lef:translations'
 
-<PickLanguage />
+<PickLanguage showTitle />
 ```
 
 ## withTranslator
