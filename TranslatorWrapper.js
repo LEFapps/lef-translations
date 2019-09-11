@@ -28,7 +28,7 @@ const TranslatorWrapper = ({ children, ...props }) => {
       return Meteor.user() ? Meteor.user().profile.language : undefined
     },
     MarkdownImageUpload: props => {
-      return <MarkdownImageUpload {...props} />
+      return <MarkdownImageUpload {...props} picture />
     }
   })
   return <Translator {...props}>{children}</Translator>
