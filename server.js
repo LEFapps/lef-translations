@@ -16,7 +16,7 @@ Meteor.methods({
     if (!args.language) {
       return Collection.findOne(_id)
     }
-    const fields = {}
+    const fields = { params: 1 }
     fields[args.language] = 1
     const translation = Collection.findOne(_id)
     if (!args.skipSettings) {
