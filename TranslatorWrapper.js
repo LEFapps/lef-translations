@@ -1,7 +1,7 @@
+import { Meteor } from 'meteor/meteor'
+import { Roles } from 'meteor/alanning:roles'
 import React from 'react'
 import { Translator, withTranslator } from '@lefapps/translations'
-import { Roles } from 'meteor/alanning:roles'
-import { Meteor } from 'meteor/meteor'
 import { MarkdownImageUpload } from 'meteor/lef:imgupload'
 
 const TranslatorWrapper = ({ children, ...props }) => {
@@ -10,6 +10,7 @@ const TranslatorWrapper = ({ children, ...props }) => {
       return Meteor.callPromise('getTranslation', props, args)
     },
     allowEditing: () => {
+      // note: new alanning:roles version no longer keeps user roles in user object, downgrade to a version before 2.0
       return Roles.userIsInRole(Meteor.userId(), 'admin')
     },
     updateTranslation: doc => {
