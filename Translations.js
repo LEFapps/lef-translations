@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AdminList from 'meteor/lef:adminlist'
 import { Button } from 'reactstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import truncate from 'lodash/truncate'
 
 import Collection from './Collection'
 
@@ -70,7 +71,11 @@ class Translations extends Component {
           doc.md && doc[language] ? (
             <FontAwesomeIcon icon='align-left' />
           ) : (
-            doc[language]
+            truncate(doc[language], {
+              length: 96,
+              omission: '…',
+              separator: ' '
+            })
           ),
         label: language.toUpperCase(),
         fields: [language, 'md'],
