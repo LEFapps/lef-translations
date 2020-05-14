@@ -108,6 +108,7 @@ class Translations extends Component {
             collection={Collection}
             getIdsCall='translationIds'
             subscription='translationsList'
+            defaultSort={{ _id: 1 }}
             fields={fields}
             getTotalCall='totalTranslations'
             extraColumns={extraColumns}
