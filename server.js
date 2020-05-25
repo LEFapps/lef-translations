@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor'
 import { set, keys, size, difference } from 'lodash'
 
+import Translator, { withTranslator } from './TranslatorWrapper'
+import Translate from '@lefapps/translations'
+
 import Collection from './Collection'
 
 Meteor.publish('translationEdit', query => {
@@ -56,3 +59,5 @@ Meteor.methods({
 })
 
 export { Collection as TranslationsCollection }
+
+export { Translate, Translator, withTranslator }

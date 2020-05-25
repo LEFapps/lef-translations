@@ -11,7 +11,7 @@ const TranslatorWrapper = ({ children, ...props }) => {
     },
     allowEditing: () => {
       // note: new alanning:roles version no longer keeps user roles in user object, downgrade to a version before 2.0
-      return Roles.userIsInRole(Meteor.userId(), 'admin')
+      if (Meteor.isClient) return Roles.userIsInRole(Meteor.user(), 'admin')
     },
     updateTranslation: doc => {
       return Meteor.callPromise('updateTranslation', doc)
@@ -26,7 +26,8 @@ const TranslatorWrapper = ({ children, ...props }) => {
       }
     },
     getUserLanguage: () => {
-      return Meteor.user() ? Meteor.user().profile.language : undefined
+      if (Meteor.isClient)
+        return Meteor.user() ? Meteor.user().profile.language : undefined
     },
     MarkdownImageUpload: props => {
       return <MarkdownImageUpload {...props} picture />
