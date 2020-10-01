@@ -1,6 +1,6 @@
 Package.describe({
   summary: 'Translations/CMS for Meteor/React',
-  version: '3.2.6',
+  version: '3.2.7',
   name: 'lef:translations'
 })
 
@@ -19,7 +19,7 @@ Package.onUse(api => {
 
 Npm.depends({
   '@fortawesome/react-fontawesome': '0.1.0',
-  '@lefapps/translations': '3.1.7',
+  '@lefapps/translations': '3.1.8',
   'markdown-it': '8.4.2',
   'markdown-it-video': '0.6.3',
   'markdown-it-picture': '0.0.1'
