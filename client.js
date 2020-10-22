@@ -1,5 +1,5 @@
 import Translator, { withTranslator } from './TranslatorWrapper'
-import Translate from '@lefapps/translations'
+import Translate from './Translate'
 import Translations from './Translations'
 import { PickLanguage } from '@lefapps/translations'
 import { MarkdownHelp } from '@lefapps/translations'
