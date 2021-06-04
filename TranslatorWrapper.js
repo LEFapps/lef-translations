@@ -1,10 +1,11 @@
+import React from 'react'
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import React from 'react'
-import { Translator, withTranslator } from '@lefapps/translations'
 import { MarkdownImageUpload } from 'meteor/lef:imgupload'
+import { ApolloProvider } from '@apollo/client'
+import { Translator, withTranslator } from '@lefapps/translations'
 
-const TranslatorWrapper = ({ children, ...props }) => {
+const TranslatorWrapper = ({ children, client, ...props }) => {
   Object.assign(props, {
     getTranslation: (props, args = {}) => {
       return Meteor.callPromise('getTranslation', props, args)
@@ -12,6 +13,7 @@ const TranslatorWrapper = ({ children, ...props }) => {
     allowEditing: () => {
       // note: new alanning:roles version no longer keeps user roles in user object, downgrade to a version before 2.0
       if (Meteor.isClient) return Roles.userIsInRole(Meteor.user(), 'admin')
+      return false
     },
     updateTranslation: doc => {
       return Meteor.callPromise('updateTranslation', doc)
@@ -33,7 +35,11 @@ const TranslatorWrapper = ({ children, ...props }) => {
       return <MarkdownImageUpload {...props} picture />
     }
   })
-  return <Translator {...props}>{children}</Translator>
+  return (
+    <Translator {...props}>
+      <ApolloProvider client={client}>{children}</ApolloProvider>
+    </Translator>
+  )
 }
 
 export default TranslatorWrapper

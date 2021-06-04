@@ -6,6 +6,9 @@ import Translate from '@lefapps/translations'
 
 import Collection from './Collection'
 
+import './apollo/server'
+import { ssrClient } from './apollo/ssr'
+
 Meteor.publish('translationEdit', query => {
   return Collection.find(query)
 })
@@ -59,5 +62,5 @@ Meteor.methods({
 })
 
 export { Collection as TranslationsCollection }
-
+export { ssrClient }
 export { Translate, Translator, withTranslator }
