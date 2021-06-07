@@ -1,4 +1,6 @@
+import React from 'react'
 import { Meteor } from 'meteor/meteor'
+import { ApolloProvider } from '@apollo/client'
 import { set, keys, size, difference } from 'lodash'
 
 import Translator, { withTranslator } from './TranslatorWrapper'
@@ -7,7 +9,7 @@ import Translate from '@lefapps/translations'
 import Collection from './Collection'
 
 import './apollo/server'
-import { ssrClient } from './apollo/ssr'
+import { client } from './apollo/ssr'
 
 Meteor.publish('translationEdit', query => {
   return Collection.find(query)
@@ -61,6 +63,14 @@ Meteor.methods({
   }
 })
 
+const TranslatorWrapper = ({ children, ...props }) => {
+  return (
+    <Translator {...props}>
+      <ApolloProvider client={client}>{children}</ApolloProvider>
+    </Translator>
+  )
+}
+
 export { Collection as TranslationsCollection }
-export { ssrClient }
-export { Translate, Translator, withTranslator }
+export { client }
+export { Translate, TranslatorWrapper as Translator, withTranslator }

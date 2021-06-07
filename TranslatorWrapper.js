@@ -5,7 +5,9 @@ import { MarkdownImageUpload } from 'meteor/lef:imgupload'
 import { ApolloProvider } from '@apollo/client'
 import { Translator, withTranslator } from '@lefapps/translations'
 
-const TranslatorWrapper = ({ children, client, ...props }) => {
+const { client } = require(Meteor.isServer ? './apollo/ssr' : './apollo/client')
+
+const TranslatorWrapper = ({ children, ...props }) => {
   Object.assign(props, {
     getTranslation: (props, args = {}) => {
       return Meteor.callPromise('getTranslation', props, args)
