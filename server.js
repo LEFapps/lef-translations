@@ -14,6 +14,13 @@ Meteor.publish('translationsList', (query, params) => {
   return Collection.find(query)
 })
 
+Meteor.publish('translationsPreload', (limit = 100) => {
+  return Collection.find(
+    {},
+    { sort: { views: -1 }, limit: limit || 100, disableOplog: true }
+  )
+})
+
 Meteor.methods({
   getTranslation: ({ _id, md, category, params }, args = {}) => {
     if (!args.language) {

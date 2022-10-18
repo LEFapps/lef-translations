@@ -4,12 +4,11 @@ Meteor React package for translations and CMS. This package wraps the npm packag
 
 ## Installation
 
-
 1. Add this repo as a git submodule in the `/packages` repository
 1. `$ meteor add lef:translations`
 1. Make sure the following icons are in your **fontawesome library**:
-  `faQuestion, faFlag, faCheck, faEdit, faTimes`<br>
-  (Using an [icons helper file*](#icons-helper-file) is recommended.)
+   `faQuestion, faFlag, faCheck, faEdit, faTimes`<br>
+   (Using an [icons helper file\*](#icons-helper-file) is recommended.)
 
 ## Wrapper
 
@@ -24,7 +23,8 @@ const languageSettings = {
   titles: {
     nl: 'Nederlands',
     fr: 'Français'
-  }
+  },
+  preload: true // boolean or integer
 }
 
 <Translator settings={languageSettings}>
@@ -76,6 +76,7 @@ const ComponentContainer = withTranslator(Component)
 ```
 
 `translator` looks usually like this:
+
 ```JS
 const translator = {
   currentLanguage: 'nl',
