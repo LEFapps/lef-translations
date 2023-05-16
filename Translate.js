@@ -6,6 +6,7 @@ import Collection from './Collection'
 import { markdown } from './helpers/markdown'
 
 const TranslateClient = ({ _id, register = () => null, onLoad, ...props }) => {
+  if (!_id || typeof _id === 'undefined') return ''
   useEffect(() => {
     register(_id)
   }, [_id])
@@ -13,6 +14,7 @@ const TranslateClient = ({ _id, register = () => null, onLoad, ...props }) => {
 }
 
 const TranslateSsr = ({ _id, ...props }) => {
+  if (!_id || typeof _id === 'undefined') return ''
   const translation = Collection.findOne(_id)
   const lang = Meteor.settings.public.languages.default
   let result = translation[lang] || ''
