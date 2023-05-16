@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor'
-import { set, keys, size, difference } from 'lodash'
+import { set, keys, size, difference, isNumber } from 'lodash'
 
 import Translator, { withTranslator } from './TranslatorWrapper'
 import Translate from '@lefapps/translations'
@@ -12,6 +12,14 @@ Meteor.publish('translationEdit', query => {
 
 Meteor.publish('translationsList', (query, params) => {
   return Collection.find(query)
+})
+
+Meteor.publish('translationsPreload', (limit = 100) => {
+  const options = {
+    sort: { views: -1 },
+    limit: isNumber(limit) ? limit : 100
+  }
+  return Collection.find({}, options)
 })
 
 Meteor.methods({

@@ -1,10 +1,10 @@
 import { Meteor } from 'meteor/meteor'
 import { Roles } from 'meteor/alanning:roles'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Translator, withTranslator } from '@lefapps/translations'
 import { MarkdownImageUpload } from 'meteor/lef:imgupload'
 
-const TranslatorWrapper = ({ children, ...props }) => {
+const TranslatorWrapper = ({ preload, children, ...props }) => {
   Object.assign(props, {
     getTranslation: (props, args = {}) => {
       return Meteor.callPromise('getTranslation', props, args)
@@ -33,6 +33,9 @@ const TranslatorWrapper = ({ children, ...props }) => {
       return <MarkdownImageUpload {...props} picture />
     }
   })
+  useEffect(() => {
+    preload && Meteor.subscribe('translationsPreload', preload)
+  }, [preload])
   return <Translator {...props}>{children}</Translator>
 }
 
