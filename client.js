@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
 import {
   UncontrolledDropdown,
   DropdownToggle,
@@ -18,9 +18,9 @@ import {
   Card,
   Popover,
   PopoverHeader,
-  PopoverBody,
-} from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  PopoverBody
+} from 'reactstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faFlag,
   faEdit,
@@ -28,48 +28,48 @@ import {
   faTimes,
   faAlignLeft,
   faSearch,
-  faQuestion,
-} from "@fortawesome/free-solid-svg-icons";
-import { Meteor } from "meteor/meteor";
-import { withTracker } from "meteor/react-meteor-data";
-import Translator from "./lib";
-import { Session } from "meteor/session";
-import { Roles } from "meteor/alanning:roles";
-import { keys } from "lodash";
+  faQuestion
+} from '@fortawesome/free-solid-svg-icons'
+import { Meteor } from 'meteor/meteor'
+import { withTracker } from 'meteor/react-meteor-data'
+import Translator from './lib'
+import { Session } from 'meteor/session'
+import { Roles } from 'meteor/alanning:roles'
+import { kebabCase, keys } from 'lodash'
 
-const markdown = require("markdown-it")({
+const markdown = require('markdown-it')({
   html: true,
   linkify: true,
-  typography: true,
-}).use(require("markdown-it-video"));
+  typography: true
+})
+  .use(require('markdown-it-anchor').default, { slugify: kebabCase })
+  .use(require('markdown-it-video'))
 
 Tracker.autorun(() => {
-  let language, ref;
-  language = (ref = Meteor.user()) != null ? ref.profile.language : void 0;
+  let language, ref
+  language = (ref = Meteor.user()) != null ? ref.profile.language : void 0
   if (!language) {
-    const navLang = (navigator.language || navigator.userLanguage).split(
-      "-",
-    )[0];
+    const navLang = (navigator.language || navigator.userLanguage).split('-')[0]
     if (Translator.languages.includes(navLang)) {
-      language = navLang;
+      language = navLang
     } else {
-      language = Translator.default;
+      language = Translator.default
     }
-    Session.set("language", language);
+    Session.set('language', language)
   }
-});
+})
 
 Translator.setLanguage = language => {
   if (Meteor.user()) {
     return Meteor.users.update(Meteor.user()._id, {
       $set: {
-        "profile.language": language,
-      },
-    });
+        'profile.language': language
+      }
+    })
   } else {
-    return Session.set("language", language);
+    return Session.set('language', language)
   }
-};
+}
 
 const PickLanguage = () => {
   return (
@@ -86,53 +86,58 @@ const PickLanguage = () => {
             >
               {language}
             </DropdownItem>
-          );
+          )
         })}
       </DropdownMenu>
     </UncontrolledDropdown>
-  );
-};
+  )
+}
 
 class MarkdownHelp extends Component {
   constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
+    super(props)
+    this.toggle = this.toggle.bind(this)
     this.state = {
-      popoverOpen: false,
-    };
+      popoverOpen: false
+    }
   }
   toggle() {
     this.setState({
-      popoverOpen: !this.state.popoverOpen,
-    });
+      popoverOpen: !this.state.popoverOpen
+    })
   }
   render() {
     return (
       <span>
-        <Button id="markdownhelp" outline color="warning" onClick={this.toggle}>
+        <Button id='markdownhelp' outline color='warning' onClick={this.toggle}>
           <FontAwesomeIcon icon={faQuestion} />
         </Button>
         <Popover
-          placement="auto"
+          placement='auto'
           isOpen={this.state.popoverOpen}
-          target="markdownhelp"
+          target='markdownhelp'
           toggle={this.toggle}
         >
           <PopoverHeader>Markdown Help</PopoverHeader>
           <PopoverBody>
             <h5>Titels</h5>
             <p>
-              # Grote titel<br /> ## Titel<br /> ### Kleine titel
+              # Grote titel
+              <br /> ## Titel
+              <br /> ### Kleine titel
             </p>
             <h5>Lijsten</h5>
             <p>
-              1. Eerste genummerde item<br /> 2. Een tweede item<br /> ⋅⋅* Niet
-              genumerd sub-item<br /> * Niet genummerde lijst item<br /> * Nog
-              een item
+              1. Eerste genummerde item
+              <br /> 2. Een tweede item
+              <br /> ⋅⋅* Niet genumerd sub-item
+              <br /> * Niet genummerde lijst item
+              <br /> * Nog een item
             </p>
             <h5>Tekst</h5>
             <p>
-              __vetgedrukt__<br /> _schuingedrukt_
+              __vetgedrukt__
+              <br /> _schuingedrukt_
             </p>
             <h5>Links</h5>
             <p>[leesbare tekst](https://www.voorbeeld.com)</p>
@@ -140,59 +145,60 @@ class MarkdownHelp extends Component {
             <p>> Quote</p>
             <h5>Video embed</h5>
             <p>
-              @[youtube](https://www.youtube.com/watch?v=_gMq3hRLDD0)<br />
+              @[youtube](https://www.youtube.com/watch?v=_gMq3hRLDD0)
+              <br />
               @[vimeo](https://vimeo.com/212404816)
             </p>
           </PopoverBody>
         </Popover>
       </span>
-    );
+    )
   }
 }
 
 const TranslationModalContainer = props => {
-  const { translation } = props;
-  if (!translation) return null;
+  const { translation } = props
+  if (!translation) return null
   return (
     <TranslationModal
       {...props}
-      key={`${translation._id}-${keys(translation).join("-")}`}
+      key={`${translation._id}-${keys(translation).join('-')}`}
     />
-  );
-};
+  )
+}
 
 class TranslationModal extends Component {
   constructor(props) {
-    super(props);
-    const state = props.translation || false;
-    this.state = state;
-    this.save = this.save.bind(this);
-    this.toggleUpload = this.toggleUpload.bind(this);
+    super(props)
+    const state = props.translation || false
+    this.state = state
+    this.save = this.save.bind(this)
+    this.toggleUpload = this.toggleUpload.bind(this)
   }
   handleChange(e, language) {
-    this.setState({ [language]: e.target.value });
+    this.setState({ [language]: e.target.value })
   }
   handleUpload(result) {
-    console.log(result);
+    console.log(result)
   }
   toggleUpload() {
-    this.setState({ upload: !this.state.upload });
+    this.setState({ upload: !this.state.upload })
   }
   save() {
-    Meteor.call("updateTranslation", this.state, (error, result) => {
+    Meteor.call('updateTranslation', this.state, (error, result) => {
       if (result) {
-        this.props.toggle();
+        this.props.toggle()
       } else {
-        alert(JSON.stringify(error));
+        alert(JSON.stringify(error))
       }
-    });
+    })
   }
   render() {
-    const { loading, open, toggle } = this.props;
-    const translation = this.state;
-    if (loading || !translation) return null;
+    const { loading, open, toggle } = this.props
+    const translation = this.state
+    if (loading || !translation) return null
     return (
-      <Modal isOpen={open} toggle={toggle} size="lg">
+      <Modal isOpen={open} toggle={toggle} size='lg'>
         <ModalHeader toggle={toggle}>
           <FontAwesomeIcon icon={faEdit} /> {translation._id}
         </ModalHeader>
@@ -216,78 +222,78 @@ class TranslationModal extends Component {
               <hr />
             </div>
           </div> */}
-          <div className="row">
+          <div className='row'>
             {Translator.languages.map(language => {
               return (
-                <div className="col" key={language}>
+                <div className='col' key={language}>
                   <h6>{language}</h6>
                   {translation.md ? (
                     <div>
                       <Input
-                        type="textarea"
+                        type='textarea'
                         value={translation[language]}
                         onChange={e => this.handleChange(e, language)}
-                        rows="10"
+                        rows='10'
                       />
                       <hr />
                       <div
                         dangerouslySetInnerHTML={{
-                          __html: markdown.render(translation[language] || ""),
+                          __html: markdown.render(translation[language] || '')
                         }}
                       />
                     </div>
                   ) : (
                     <Input
-                      type="text"
+                      type='text'
                       value={translation[language]}
                       onChange={e => this.handleChange(e, language)}
                     />
                   )}
                 </div>
-              );
+              )
             })}
           </div>
         </ModalBody>
         <ModalFooter>
           <MarkdownHelp />
-          <Button onClick={this.save} color="success">
+          <Button onClick={this.save} color='success'>
             <FontAwesomeIcon icon={faCheck} />
           </Button>
-          <Button onClick={toggle} color="danger">
+          <Button onClick={toggle} color='danger'>
             <FontAwesomeIcon icon={faTimes} />
           </Button>
         </ModalFooter>
       </Modal>
-    );
+    )
   }
 }
 
 const ModalContainer = withTracker(props => {
-  const handle = Meteor.subscribe("translations", props.translation._id);
-  const translation = Translator.translations.findOne(props.translation._id);
-  return { translation, loading: !handle.ready() };
-})(TranslationModalContainer);
+  const handle = Meteor.subscribe('translations', props.translation._id)
+  const translation = Translator.translations.findOne(props.translation._id)
+  return { translation, loading: !handle.ready() }
+})(TranslationModalContainer)
 
 class Translate extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      editing: false,
-    };
-    this.toggleEditing = this.toggleEditing.bind(this);
+      editing: false
+    }
+    this.toggleEditing = this.toggleEditing.bind(this)
   }
   toggleEditing() {
     if (
-      Roles.userIsInRole(Meteor.userId(), "admin") &&
+      Roles.userIsInRole(Meteor.userId(), 'admin') &&
       !this.props.preventInPageEdit
     ) {
-      this.setState({ editing: !this.state.editing });
+      this.setState({ editing: !this.state.editing })
     }
   }
   render() {
-    const tr = this.props.translation;
+    const tr = this.props.translation
     const text =
-      this.props.md && tr ? markdown.render(tr) : tr || this.props._id;
+      this.props.md && tr ? markdown.render(tr) : tr || this.props._id
     return (
       <>
         <ModalContainer
@@ -296,42 +302,42 @@ class Translate extends Component {
           open={this.state.editing}
         />
         <span
-          className="translation"
+          className='translation'
           dangerouslySetInnerHTML={{ __html: text }}
           onDoubleClick={this.toggleEditing}
         />
       </>
-    );
+    )
   }
 }
 
-const TranslateContainer = withTracker(function(options) {
-  var ref, ref1, ref2;
+const TranslateContainer = withTracker(function (options) {
+  var ref, ref1, ref2
   const language =
     ((ref = Meteor.user()) != null ? ref.profile.language : void 0) ||
-    Session.get("language");
-  const handle = Meteor.subscribe("translation", options, language);
+    Session.get('language')
+  const handle = Meteor.subscribe('translation', options, language)
   const translation =
     (ref1 = Translator.translations) != null
       ? (ref2 = ref1.findOne(options._id)) != null
         ? ref2[language]
         : void 0
-      : void 0;
+      : void 0
   return {
-    translation: translation,
-  };
-})(Translate);
+    translation: translation
+  }
+})(Translate)
 
 class TranslationEdit extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      editing: false,
-    };
-    this.toggleEditing = this.toggleEditing.bind(this);
+      editing: false
+    }
+    this.toggleEditing = this.toggleEditing.bind(this)
   }
   toggleEditing() {
-    this.setState({ editing: !this.state.editing });
+    this.setState({ editing: !this.state.editing })
   }
   render() {
     return (
@@ -341,32 +347,32 @@ class TranslationEdit extends Component {
           toggle={this.toggleEditing}
           open={this.state.editing}
         />
-        <Button onClick={this.toggleEditing} size="sm">
+        <Button onClick={this.toggleEditing} size='sm'>
           <FontAwesomeIcon icon={faEdit} />
         </Button>
       </div>
-    );
+    )
   }
 }
 
 class Translations extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      query: {},
-    };
+      query: {}
+    }
   }
   search(e, key) {
-    const query = this.state.query;
+    const query = this.state.query
     if (e.target.value) {
       query[key] = {
         $regex: e.target.value,
-        $options: "i",
-      };
+        $options: 'i'
+      }
     } else {
-      delete query[key];
+      delete query[key]
     }
-    this.setState(query);
+    this.setState(query)
   }
   render() {
     return (
@@ -376,26 +382,26 @@ class Translations extends Component {
             <th />
             <th>ID</th>
             {Translator.languages.map(language => {
-              return <th key={language}>{language}</th>;
+              return <th key={language}>{language}</th>
             })}
           </tr>
         </thead>
         <tbody>
           <tr>
             <td />
-            {["_id"].concat(Translator.languages).map(item => {
+            {['_id'].concat(Translator.languages).map(item => {
               return (
                 <td key={item}>
                   <InputGroup>
                     <Input onChange={e => this.search(e, item)} />
-                    <InputGroupAddon addonType="append">
+                    <InputGroupAddon addonType='append'>
                       <Button>
                         <FontAwesomeIcon icon={faSearch} />
                       </Button>
                     </InputGroupAddon>
                   </InputGroup>
                 </td>
-              );
+              )
             })}
           </tr>
           {this.props.translations
@@ -417,28 +423,28 @@ class Translations extends Component {
                           translation[language]
                         )}
                       </td>
-                    );
+                    )
                   })}
                 </tr>
-              );
+              )
             })}
         </tbody>
       </Table>
-    );
+    )
   }
 }
 
 const TranslationsContainer = withTracker(props => {
-  const handle = Meteor.subscribe("translations");
+  const handle = Meteor.subscribe('translations')
   return {
     translations: Translator.translations,
-    loading: !handle.ready(),
-  };
-})(Translations);
+    loading: !handle.ready()
+  }
+})(Translations)
 
 export {
   TranslateContainer as Translate,
   PickLanguage,
   TranslationsContainer as Translations,
-  Translator,
-};
+  Translator
+}
